@@ -73,8 +73,8 @@ class MyAppState extends State<MyApp> {
               ),
               BoundingBox(
                   _detections,
-                  640,
                   480,
+                  640,
                   MediaQuery.of(context).size.height,
                   MediaQuery.of(context).size.width),
             ],
@@ -131,7 +131,7 @@ class MyAppState extends State<MyApp> {
 
   _onStream() async {
     WidgetsFlutterBinding.ensureInitialized();
-    camera = (await availableCameras())[1];
+    camera = (await availableCameras())[0];
 
     controller = CameraController(camera, ResolutionPreset.medium);
     await controller!.initialize();
@@ -146,7 +146,7 @@ class MyAppState extends State<MyApp> {
         _tfLite(image);
         _isDetecting = false;
       });
-      print("---- ${DateTime.now()} ----\n");
+      //print("---- ${DateTime.now()} ----\n");
     });
   }
 
@@ -179,6 +179,8 @@ class MyAppState extends State<MyApp> {
         anchors: _anchors);
 
     _detections = UtilsFace().origNms(detections, 0.75);
+
+    print ('FACES: ${_detections.length}');
 
     for (Detection detection in _detections) {
       print(detection.classID.toString() +
